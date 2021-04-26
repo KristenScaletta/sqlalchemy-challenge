@@ -88,11 +88,11 @@ def start_date():
     return jsonify(active_station)
 
 @app.route("/api/v1.0/end_date")
-def start_date():
+def end_date():
     session = Session(engine)
-    active_station = engine.execute('SELECT station, MAX(tobs), MIN(tobs), AVG(tobs) FROM Measurement WHERE station == "USC00519281"').fetchall()
+    active_station_end = engine.execute('SELECT station, MAX(tobs), MIN(tobs), AVG(tobs) FROM Measurement WHERE station == "USC00519281"').fetchall()
     session.close()
-    return jsonify(active_station)
+    return jsonify(active_station_end)
 
 if __name__ == "__main__":
     app.run(debug=True)
