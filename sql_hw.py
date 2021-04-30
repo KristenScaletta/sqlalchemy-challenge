@@ -7,8 +7,11 @@ from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func
 
 from flask import Flask, jsonify
+#declare variables
 start_date = ""
 end_date=""
+start_date_solo=""
+
 # create engine to hawaii.sqlite
 engine = create_engine("sqlite:///Resources/hawaii.sqlite")
 # reflect an existing database into a new model
@@ -80,6 +83,14 @@ def temperature():
     session.close()
     return jsonify(station_query)
 
+@app.route("/api/v1.0/start_date")
+def start_end_date():
+    print("Enter Start Date ")
+    start_date_solo = input()
+    session = Session(engine)
+    active_station_start = engine.execute(f'SELECT station, MAX(tobs), MIN(tobs), AVG(tobs) FROM Measurement WHERE date >= {start_date_solo}').fetchall()
+    session.close()
+    return jsonify({'Active Station Start': [dict(row) for row in active_station_start]})
 
 @app.route("/api/v1.0/start_end_date")
 def start_end_date():
@@ -88,7 +99,6 @@ def start_end_date():
     print("Enter End Date ")
     end_date = input()
     session = Session(engine)
-
     active_station_dates = engine.execute(f'SELECT station, MAX(tobs), MIN(tobs), AVG(tobs) FROM Measurement WHERE date >= {start_date} AND date < {end_date}').fetchall()
     session.close()
     return jsonify({'Active Station': [dict(row) for row in active_station_dates]})
