@@ -99,7 +99,7 @@ def start_end_date():
     print("Enter End Date ")
     end_date = input()
     session = Session(engine)
-    active_station_dates = engine.execute(f'SELECT station, MAX(tobs), MIN(tobs), AVG(tobs) FROM Measurement WHERE date >= {start_date} AND date < {end_date}').fetchall()
+    active_station_dates = engine.execute(f'SELECT station, MAX(tobs), MIN(tobs), AVG(tobs) FROM Measurement WHERE date > {start_date} AND date < {end_date}').fetchall()
     session.close()
     return jsonify({'Active Station': [dict(row) for row in active_station_dates]})
 
